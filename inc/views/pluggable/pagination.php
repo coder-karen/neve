@@ -27,6 +27,9 @@ class Pagination extends Base_View {
 		add_action( 'neve_do_pagination', array( $this, 'render_pagination' ) );
 		add_action( 'neve_post_navigation', array( $this, 'render_post_navigation' ) );
 		add_filter( 'paginate_links_output', array( $this, 'maybe_add_jump_to_page_input' ) );
+		if ( $this->jump_to_enabled() ) {
+			add_action( 'wp_footer', array( $this, 'expose_jump_to_js' ) );
+		}
 	}
 
 	/**
@@ -145,6 +148,15 @@ class Pagination extends Base_View {
 	}
 
 	/**
+	 * Check if Jump to Page feature is enabled
+	 * 
+	 * @return bool 
+	 */
+	private function jump_to_enabled() {
+		return get_theme_mod( 'neve_pagination_type', 'number' ) === 'jump-to-page' ? true : false;
+	}
+
+	/**
 	 * Filter the pagination links to decide whether or not to show the "Jump to Page" input field.
 	 * 
 	 * @param mixed $markup the pagination links from the filter.
@@ -162,21 +174,59 @@ class Pagination extends Base_View {
 	}
 
 	/**
+	 * Expose our Jump to JavaScript on the page.
+	 * 
+	 * @return void
+	 */
+	public function expose_jump_to_js() {
+
+		echo "
+		<script type='text/javascript'>
+		function nvJumpTo(e){
+			e.preventDefault();
+			const slug = e.target.dataset.base;
+			const query = e.target.dataset.query;
+			const queryString = ( query.length === 0 ) ? query : '?' + query
+			const pageNum = document.querySelector('#nv-page-jump-to').value;
+			const url = '/' + slug + '/page/' + pageNum + '/' + queryString
+			window.location.href= url
+		}
+		</script>
+		";
+
+	}
+
+	/**
 	 * Create jump to navigation inputs.
 	 * 
 	 * @return mixed $markup HTML to output on page.
 	 */
 	private function create_jump_to_html() {
 
-		global $wp, $wp_query;
+		global $wp_query;
+		$blog_page_slug = '';
+		$cpt_page_slug  = '';
 
-		if ( empty( $wp->request ) ) {
-			return;
+		// Get static blog page slug
+		if ( $wp_query->is_home ) {
+			$blog_page_slug = $wp_query->query['pagename'];
 		}
 
-		$request = '/' . $wp->request;
+		// Get slug for custom post type
+		if ( is_post_type_archive() ) {
+			// https://example.com/cpt-slug/
+			$cpt_page_slug = get_post_type_archive_link( get_query_var( 'post_type' ) );
+			// /cpt-slug/
+			$cpt_page_slug = str_replace( get_home_url(), '', $cpt_page_slug );
+			// cpt-slug
+			$cpt_page_slug = str_replace( '/', '', $cpt_page_slug );
+		}
 
-		$button_text = apply_filters( 'neve_pagination_jump_button_text', __( 'Go', 'neve' ) );
+		$slug = ( ! empty( $blog_page_slug ) ) ? $blog_page_slug : $cpt_page_slug;
+
+		$query_string = sanitize_text_field( $_SERVER['QUERY_STRING'] ?? '' );
+
+		$button_text = apply_filters( 'neve_pagination_jump_button_text', esc_html__( 'Jump', 'neve' ) );
 
 		/**
 		 * Escaping functions require args to be strings or PHPStan will throw error.
@@ -184,16 +234,14 @@ class Pagination extends Base_View {
 		$max_num_pages = (string) absint( $wp_query->max_num_pages );
 		$current_page  = ! empty( get_query_var( 'paged' ) ) ? (string) get_query_var( 'paged' ) : '';
 
-		$search_query = get_search_query();
-		$markup       = '';
+		$text   = esc_html__( 'Go to Page', 'neve' );
+		$markup = '';
 
 		$markup .= '<div id="nv-pagination-jump">';
-		$markup .= '<form action="' . esc_url( $request ) . '" >';
-		$markup .= '<a class="page-numbers">';
-		$markup .= '<input id="nv-pagination-jump-page-num" placeholder="#" type="number" value="' . esc_attr( $current_page ) . '" min="1" max="' . esc_attr( $max_num_pages ) . '" name="paged" /> ';
-		$markup .= ! empty( $search_query ) ? '<input id="s" type="hidden" value="' . esc_attr( $search_query ) . '" name="s" />' : '';
-		$markup .= '<input id="nv-pagination-jump-go" value="' . esc_attr( $button_text ) . '" type="submit" />';
-		$markup .= '</a></form></div>';
+		$markup .= '<p>' . $text . '</p>';
+		$markup .= '<input id="nv-page-jump-to" placeholder="#" type="number" value="' . esc_attr( $current_page ) . '" min="1" max="' . esc_attr( $max_num_pages ) . '" name="paged" /> ';
+		$markup .= '<a class="page-numbers" href="#" data-base="' . esc_attr( $slug ) . '" data-query="' . esc_attr( $query_string ) . '" onclick="nvJumpTo(event)">' . $button_text . '</a>';
+		$markup .= '</div>';
 		
 		return $markup;
 
@@ -210,15 +258,7 @@ class Pagination extends Base_View {
 		$last_element    = array_pop( $links );
 		$jump_to_element = $this->create_jump_to_html();
 		
-		/**
-		 * If the next button is present, add the element just before it...
-		 * If it's not then add the jump to element as the last item instead.
-		 */
-		if ( strpos( $last_element, '<a class="next page-numbers"' ) !== false ) {
-			array_push( $links, $jump_to_element, $last_element ); 
-		} else {
-			array_push( $links, $last_element, $jump_to_element );
-		}
+		array_push( $links, $last_element, $jump_to_element );
 
 		array_walk(
 			$links,
@@ -239,9 +279,8 @@ class Pagination extends Base_View {
 	 */
 	public function allow_extra_tags( $tags ) {
 
-		$tags['form']                 = array();
-		$tags['form']['action']       = array();
 		$tags['input']                = array();
+		$tags['a']['onclick']         = array();
 		$tags['input']['id']          = array();
 		$tags['input']['min']         = array();
 		$tags['input']['max']         = array();

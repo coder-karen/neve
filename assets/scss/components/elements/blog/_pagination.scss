@@ -28,18 +28,27 @@ ul.page-numbers {
 
 	#nv-pagination-jump {
 
-		a {
-			padding: 3px 8px;
+		a,
+		input,
+		p {
+			display: inline-block;
+			margin-right: 10px;
 		}
 
-		#nv-pagination-jump-page-num {
-			padding: 5px;
-			width: 50px;
+		input {
+			border: 1px solid #e3e3e3;
+			border-radius: 4px;
+			font-size: var(--bodyFontSize);
+			padding: 2px;
+			text-align: center;
+			width: 60px;
 		}
 
-		#nv-pagination-jump-go {
-			padding: 5px 20px;
+		input[type="number"]::-webkit-inner-spin-button,
+		input[type="number"]::-webkit-outer-spin-button {
+			opacity: 1;
 		}
+
 	}
 
 }
