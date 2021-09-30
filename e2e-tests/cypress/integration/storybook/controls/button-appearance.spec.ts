@@ -12,6 +12,24 @@ describe('Button Appearance', function () {
 				/\{ "type": "fill", "background": "#cccccc", "backgroundhover": "#333333", "text": "#000000", "texthover": "#ffffff", "borderradius": \{ "top": 10, "bottom": 10, "right": 10, "left": 10 \}, "borderwidth": \{ "top": 1, "bottom": 1, "right": 1, "left": 1 \} \}/i,
 			);
 		});
+
+		it('Opens and closes to choose normal and hover colors', function () {
+			cy.findByRole('button', {
+				name: /normal/i,
+			}).click();
+			cy.get(':nth-child(1) > :nth-child(2) > .neve-control-header').should('not.exist');
+			cy.get(':nth-child(1) > :nth-child(3) > .neve-control-header').should('not.exist');
+			cy.get(':nth-child(2) > :nth-child(2) > .neve-control-header').should('not.exist');
+			cy.get(':nth-child(2) > :nth-child(3) > .neve-control-header').should('not.exist');
+
+			cy.findByRole('button', {
+				name: /hover/i,
+			}).click();
+			cy.get(':nth-child(1) > :nth-child(2) > .neve-control-header').should('not.exist');
+			cy.get(':nth-child(1) > :nth-child(3) > .neve-control-header').should('not.exist');
+			cy.get(':nth-child(2) > :nth-child(2) > .neve-control-header').should('be.visible');
+			cy.get(':nth-child(2) > :nth-child(3) > .neve-control-header').should('be.visible');
+		});
 	});
 
 	context('No Hover', function () {
