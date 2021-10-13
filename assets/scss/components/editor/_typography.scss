@@ -57,9 +57,9 @@ $headings: [h1,h2,h3,h4,h5,h6];
 
 		&.wp-block,
 		& {
-			font-size: var(--#{$heading}FontSize);
+			//font-size: var(--#{$heading}FontSize);
+			//line-height: var(--#{$heading}LineHeight);
 			font-weight: var(--#{$heading}FontWeight);
-			line-height: var(--#{$heading}LineHeight);
 			letter-spacing: var(--#{$heading}LetterSpacing);
 			text-transform: var(--#{$heading}TextTransform);
 		}
@@ -68,9 +68,9 @@ $headings: [h1,h2,h3,h4,h5,h6];
 
 .editor-post-title__block .editor-post-title__input {
 	color: var(--nv-text-color);
-	font-size: var(--h1FontSize);
+	//font-size: var(--h1FontSize);
+	//line-height: var(--h1LineHeight);
 	font-weight: var(--h1FontWeight);
-	line-height: var(--h1LineHeight);
 	letter-spacing: var(--h1LetterSpacing);
 	text-transform: var(--h1TextTransform);
 }

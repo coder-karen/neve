@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "templateParts": [
+	{
+	  "name": "header",
+	  "area": "header"
+	},
+	{
+	  "name": "footer",
+	  "area": "footer"
+	}
+  ],
+  "settings": {
+	"layout": {
+	  "contentSize": "70%",
+	  "wideSize": "90%"
+	},
+	"typography": {
+	  "fontSizes": [
+		{
+		  "name": "Small",
+		  "slug": "small",
+		  "size": "0.825em"
+		},
+		{
+		  "name": "Normal",
+		  "slug": "normal",
+		  "size": "inherit"
+		},
+		{
+		  "name": "Medium",
+		  "slug": "medium",
+		  "size": "calc(var(--h3FontSize) * 1.4)"
+		},
+		{
+		  "name": "Large",
+		  "slug": "large",
+		  "size": "calc(var(--h2FontSize) * 1.4)"
+		},
+		{
+		  "name": "Huge",
+		  "slug": "huge",
+		  "size": "calc(var(--h1FontSize) * 1.4)"
+		}
+	  ]
+	},
+	"color": {
+	  "palette": [
+		{
+		  "name": "Primary Accent",
+		  "slug": "neve-link-color",
+		  "color": "var(--nv-primary-accent)"
+		},
+		{
+		  "name": "Secondary Accent",
+		  "slug": "neve-link-hover-color",
+		  "color": "var(--nv-secondary-accent)"
+		},
+		{
+		  "name": "Site Background",
+		  "slug": "nv-site-bg",
+		  "color": "var(--nv-site-bg)"
+		},
+		{
+		  "name": "Light Background",
+		  "slug": "nv-light-bg",
+		  "color": "var(--nv-light-bg)"
+		},
+		{
+		  "name": "Dark Background",
+		  "slug": "nv-dark-bg",
+		  "color": "var(--nv-dark-bg)"
+		},
+		{
+		  "name": "Text Color",
+		  "slug": "neve-text-color",
+		  "color": "var(--nv-text-color)"
+		},
+		{
+		  "name": "Text Dark Background",
+		  "slug": "nv-text-dark-bg",
+		  "color": "var(--nv-text-dark-bg)"
+		},
+		{
+		  "name": "Extra Color 1",
+		  "slug": "nv-c-1",
+		  "color": "var(--nv-c-1)"
+		},
+		{
+		  "name": "Extra Color 2",
+		  "slug": "nv-c-2",
+		  "color": "var(--nv-c-2)"
+		}
+	  ]
+	}
+  },
+  "styles": {
+	"typography": {
+	  "fontSize": "var(--bodyFontSize)",
+	  "letterSpacing": "var(--bodyLetterSpacing)",
+	  "fontWeight": "var(--bodyFontWeight)",
+	  "textTransform": "var(--bodyTextTransform)",
+	  "lineHeight": "var(--bodyLineHeight)",
+	  "fontFamily": "var(--bodyFontFamily),var(--nv-fallback-ff)"
+	},
+	"elements": {
+	  "h1": {
+		"typography": {
+		  "fontSize": "var(--h1FontSize)",
+		  "lineHeight": "var(--h1LineHeight)"
+		}
+	  },
+	  "h2": {
+		"typography": {
+		  "fontSize": "var(--h2FontSize)",
+		  "lineHeight": "var(--h2LineHeight)"
+		}
+	  },
+	  "h3": {
+		"typography": {
+		  "fontSize": "var(--h3FontSize)",
+		  "lineHeight": "var(--h3LineHeight)"
+		}
+	  },
+	  "h4": {
+		"typography": {
+		  "fontSize": "var(--h4FontSize)",
+		  "lineHeight": "var(--h4LineHeight)"
+		}
+	  },
+	  "h5": {
+		"typography": {
+		  "fontSize": "var(--h5FontSize)",
+		  "lineHeight": "var(--h5LineHeight)"
+		}
+	  },
+	  "h6": {
+		"typography": {
+		  "fontSize": "var(--h6FontSize)",
+		  "lineHeight": "var(--h6LineHeight)"
+		}
+	  }
+	}
+  }
+}
