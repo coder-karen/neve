@@ -37,8 +37,8 @@
 				sidebar: '.single-product .shop-container .nv-sidebar-wrap'
 			},
 			'neve_other_pages_content_width': {
-				content: 'body:not(.single):not(.archive):not(.blog):not(.search) .neve-main > .container .col',
-				sidebar: 'body:not(.single):not(.archive):not(.blog):not(.search) .nv-sidebar-wrap'
+				content: 'body:not(.single):not(.archive):not(.blog):not(.search):not(.error404) .neve-main > .container .col',
+				sidebar: 'body:not(.single):not(.archive):not(.blog):not(.search):not(.error404) .nv-sidebar-wrap'
 			},
 		},
 
@@ -89,5 +89,3 @@
 })( jQuery );
 
 jQuery.neveLayoutPreview.init();
-
-
