@@ -17,6 +17,7 @@ jobs:
         with:
           php-version: '7.1'
           extensions: simplexml
+          tools: composer:v1
       - name: Checkout source code
         uses: actions/checkout@v2
       - name: Get Composer Cache Directory
@@ -31,7 +32,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
       - name: Install composer
-        run: composer install --ignore-platform-reqs
+        run: composer install --ignore-platform-reqs --prefer-dist --no-progress --no-suggest
       - name: Run PHPCS
         run: composer run lint
 
